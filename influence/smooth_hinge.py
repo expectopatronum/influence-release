@@ -1,7 +1,7 @@
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import unicode_literals  
+
+
+
+  
 
 import abc
 import sys
@@ -252,7 +252,7 @@ class SmoothHinge(GenericNeuralNet):
             print('Using model minus one')
             model = self.svm_model_minus_one
         else:
-            raise ValueError, "feed_dict has incorrect number of training examples"
+            raise ValueError("feed_dict has incorrect number of training examples")
 
         model.fit(X_train, Y_train)
         # sklearn returns coefficients in shape num_classes x num_features

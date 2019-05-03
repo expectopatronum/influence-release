@@ -4,6 +4,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 
 import en_core_web_sm
+from functools import reduce
 
 class NLProcessor(object):
     def __init__(self):
@@ -33,9 +34,9 @@ class NLProcessor(object):
         Y[len(spam):] = 0
 
 
-        docs_Y = zip(docs, Y)
+        docs_Y = list(zip(docs, Y))
         np.random.shuffle(docs_Y)
-        docs, Y = zip(*docs_Y)
+        docs, Y = list(zip(*docs_Y))
 
         Y = np.array(Y)
 

@@ -1,7 +1,7 @@
-from __future__ import division
-from __future__ import print_function
-from __future__ import absolute_import
-from __future__ import unicode_literals  
+
+
+
+  
 
 import abc
 import sys
@@ -233,7 +233,7 @@ class BinaryInceptionModel(GenericNeuralNet):
         batch_feed_dict = {}
         batch_feed_dict[K.learning_phase()] = 0
 
-        for i in xrange(num_iter):
+        for i in range(num_iter):
             start = i * batch_size
             end = (i+1) * batch_size
             if end > num_examples:
@@ -265,7 +265,7 @@ class BinaryInceptionModel(GenericNeuralNet):
             print('Using model minus one')
             model = self.sklearn_model_minus_one
         else:
-            raise ValueError, "feed_dict has incorrect number of training examples"
+            raise ValueError("feed_dict has incorrect number of training examples")
 
         model.fit(X_train, Y_train)
         # sklearn returns coefficients in shape num_classes x num_features
