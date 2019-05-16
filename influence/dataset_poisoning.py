@@ -56,10 +56,10 @@ def poison_with_influence_proj_gradient_step(model, indices_to_poison, grad_infl
     poisoned_X_train_subset = project_fn(
         model.data_sets.train.x[indices_to_poison, :] - step_size * np.sign(grad_influence_wrt_input_val_subset) * 2.0 / 255.0)
 
-    print('-- max: %s, mean: %s, min: %s' % (
+    print(('-- max: %s, mean: %s, min: %s' % (
         np.max(grad_influence_wrt_input_val_subset),
         np.mean(grad_influence_wrt_input_val_subset),
-        np.min(grad_influence_wrt_input_val_subset)))
+        np.min(grad_influence_wrt_input_val_subset))))
 
     return poisoned_X_train_subset
 
@@ -78,7 +78,7 @@ def generate_inception_features(model, poisoned_X_train_subset, labels_subset, b
     poisoned_data_sets.train.reset_batch()
 
     inception_features_val = []
-    for i in xrange(num_iter):
+    for i in range(num_iter):
         feed_dict = model.fill_feed_dict_with_batch(poisoned_data_sets.train, batch_size=batch_size)
         inception_features_val_temp = model.sess.run(model.inception_features, feed_dict=feed_dict)
         inception_features_val.append(inception_features_val_temp)
@@ -110,8 +110,8 @@ def iterative_attack(top_model, full_model, top_graph, full_graph, project_fn, t
     top_model_name = top_model.model_name
     full_model_name = full_model.model_name
 
-    print('Test idx: %s' % test_indices)
-    print('Indices to poison: %s' % indices_to_poison)
+    print(('Test idx: %s' % test_indices))
+    print(('Indices to poison: %s' % indices_to_poison))
 
     # Remove everything but the poisoned train indices from the full model, to save time
     full_model.update_train_x_y(
@@ -121,7 +121,7 @@ def iterative_attack(top_model, full_model, top_graph, full_graph, project_fn, t
     labels_subset = full_model.data_sets.train.labels[eff_indices_to_poison]
 
     for attack_iter in range(num_iter):
-        print('*** Iter: %s' % attack_iter)
+        print(('*** Iter: %s' % attack_iter))
         
         print('Calculating grad...')
 
@@ -182,12 +182,12 @@ def iterative_attack(top_model, full_model, top_graph, full_graph, project_fn, t
                 test_pred = full_model.sess.run(full_model.preds, feed_dict=full_model.fill_feed_dict_with_some_ex(
                     full_model.data_sets.test,
                     test_indices))
-                print('Test pred (full): %s' % test_pred)
+                print(('Test pred (full): %s' % test_pred))
             with top_graph.as_default():
                 test_pred = top_model.sess.run(top_model.preds, feed_dict=top_model.fill_feed_dict_with_some_ex(
                     top_model.data_sets.test,
                     test_indices))
-                print('Test pred (top): %s' % test_pred)
+                print(('Test pred (top): %s' % test_pred))
 
             if ((early_stop is not None) and (len(test_indices) == 1)):
                 if test_pred[0, int(full_model.data_sets.test.labels[test_indices])] < early_stop:

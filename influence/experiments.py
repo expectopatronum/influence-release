@@ -17,8 +17,8 @@ def get_try_check(model, X_train, Y_train, Y_train_flipped, X_test, Y_test):
             [model.loss_no_reg, model.accuracy_op], 
             feed_dict=model.all_test_feed_dict)
 
-        print('%20s: fixed %3s labels. Loss %.5f. Accuracy %.3f.' % (
-            label, check_num, check_loss, check_acc))
+        print(('%20s: fixed %3s labels. Loss %.5f. Accuracy %.3f.' % (
+            label, check_num, check_loss, check_acc)))
         return check_num, check_loss, check_acc
     return try_check
 
@@ -57,7 +57,7 @@ def test_mislabeled_detection_batch(
 def viz_top_influential_examples(model, test_idx):
 
     model.reset_datasets()
-    print('Test point %s has label %s.' % (test_idx, model.data_sets.test.labels[test_idx]))
+    print(('Test point %s has label %s.' % (test_idx, model.data_sets.test.labels[test_idx])))
 
     num_to_remove = 10000
     indices_to_remove = np.arange(num_to_remove)
@@ -75,12 +75,12 @@ def viz_top_influential_examples(model, test_idx):
 
     for points, message in [
         (helpful_points, 'better'), (unhelpful_points, 'worse')]:
-        print("Top %s training points making the loss on the test point %s:" % (top_k, message))
+        print(("Top %s training points making the loss on the test point %s:" % (top_k, message)))
         for counter, idx in enumerate(points):
-            print("#%s, class=%s, predicted_loss_diff=%.8f" % (
+            print(("#%s, class=%s, predicted_loss_diff=%.8f" % (
                 idx, 
                 model.data_sets.train.labels[idx], 
-                predicted_loss_diffs[idx]))
+                predicted_loss_diffs[idx])))
 
 
 
@@ -96,7 +96,7 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
 
     
     y_test = model.data_sets.test.labels[test_idx]
-    print('Test label: %s' % y_test)
+    print(('Test label: %s' % y_test))
 
     ## Or, randomly remove training examples
     if remove_type == 'random':
@@ -133,32 +133,32 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
     model.load_checkpoint(iter_to_load, do_checks=False)
 
     print('Sanity check: what happens if you train the model a bit more?')
-    print('Loss on test idx with original model    : %s' % test_loss_val)
-    print('Loss on test idx with retrained model   : %s' % retrained_test_loss_val)
-    print('Difference in test loss after retraining     : %s' % (retrained_test_loss_val - test_loss_val))
+    print(('Loss on test idx with original model    : %s' % test_loss_val))
+    print(('Loss on test idx with retrained model   : %s' % retrained_test_loss_val))
+    print(('Difference in test loss after retraining     : %s' % (retrained_test_loss_val - test_loss_val)))
     print('===')
-    print('Total loss on training set with original model    : %s' % train_loss_val)
-    print('Total loss on training with retrained model   : %s' % retrained_train_loss_val)
-    print('Difference in train loss after retraining     : %s' % (retrained_train_loss_val - train_loss_val))
+    print(('Total loss on training set with original model    : %s' % train_loss_val))
+    print(('Total loss on training with retrained model   : %s' % retrained_train_loss_val))
+    print(('Difference in train loss after retraining     : %s' % (retrained_train_loss_val - train_loss_val)))
     
     print('These differences should be close to 0.\n')
 
     # Retraining experiment
     for counter, idx_to_remove in enumerate(indices_to_remove):
 
-        print("=== #%s ===" % counter)
-        print('Retraining without train_idx %s (label %s):' % (idx_to_remove, model.data_sets.train.labels[idx_to_remove]))
+        print(("=== #%s ===" % counter))
+        print(('Retraining without train_idx %s (label %s):' % (idx_to_remove, model.data_sets.train.labels[idx_to_remove])))
 
         train_feed_dict = model.fill_feed_dict_with_all_but_one_ex(model.data_sets.train, idx_to_remove)
         model.retrain(num_steps=num_steps, feed_dict=train_feed_dict)
         retrained_test_loss_val, retrained_params_val = sess.run([model.loss_no_reg, model.params], feed_dict=test_feed_dict)
         actual_loss_diffs[counter] = retrained_test_loss_val - test_loss_val
 
-        print('Diff in params: %s' % np.linalg.norm(np.concatenate(params_val) - np.concatenate(retrained_params_val)))      
-        print('Loss on test idx with original model    : %s' % test_loss_val)
-        print('Loss on test idx with retrained model   : %s' % retrained_test_loss_val)
-        print('Difference in loss after retraining     : %s' % actual_loss_diffs[counter])
-        print('Predicted difference in loss (influence): %s' % predicted_loss_diffs[counter])
+        print(('Diff in params: %s' % np.linalg.norm(np.concatenate(params_val) - np.concatenate(retrained_params_val))))      
+        print(('Loss on test idx with original model    : %s' % test_loss_val))
+        print(('Loss on test idx with retrained model   : %s' % retrained_test_loss_val))
+        print(('Difference in loss after retraining     : %s' % actual_loss_diffs[counter]))
+        print(('Predicted difference in loss (influence): %s' % predicted_loss_diffs[counter]))
 
         # Restore params
         model.load_checkpoint(iter_to_load, do_checks=False)
@@ -169,5 +169,5 @@ def test_retraining(model, test_idx, iter_to_load, force_refresh=False,
         actual_loss_diffs=actual_loss_diffs, 
         predicted_loss_diffs=predicted_loss_diffs)
 
-    print('Correlation is %s' % pearsonr(actual_loss_diffs, predicted_loss_diffs)[0])
+    print(('Correlation is %s' % pearsonr(actual_loss_diffs, predicted_loss_diffs)[0]))
     return actual_loss_diffs, predicted_loss_diffs, indices_to_remove
