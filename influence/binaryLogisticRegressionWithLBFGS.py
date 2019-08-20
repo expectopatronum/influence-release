@@ -85,8 +85,9 @@ class BinaryLogisticRegressionWithLBFGS(LogisticRegressionWithLBFGS):
         ):
 
         test_grad_loss_no_reg_val = self.get_test_grad_loss_no_reg_val(test_indices, loss_type=loss_type)
-
+        print("test_grad_loss_no_reg_val", test_grad_loss_no_reg_val)
         print('Norm of test gradient: %s' % np.linalg.norm(np.concatenate(test_grad_loss_no_reg_val)))
+        np.savez('output/tf_test_grad_loss_no_reg_val.npz', test_grad_loss_no_reg_val=test_grad_loss_no_reg_val)
 
         start_time = time.time()
 
@@ -110,7 +111,7 @@ class BinaryLogisticRegressionWithLBFGS(LogisticRegressionWithLBFGS):
 
         duration = time.time() - start_time
         print('Inverse HVP took %s sec' % duration)
-
+        print('Inverse HVP', inverse_hvp)
 
         start_time = time.time()
 
